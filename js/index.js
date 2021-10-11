@@ -3,15 +3,20 @@ const tableUsers = document.getElementById('table');
 let users = [];
 
 const getUsers = function() { fetch(requestUrl).then(function(response) {
-        response.json().then(function(json) {
-            document.getElementById("inId").value = "";
-            document.getElementById("inName").value = "";
-            document.getElementById("inLink").value = "";
-            tableUsers.innerHTML = "";
-            for (let user of json) {
-                tableUsers.innerHTML += createTemplate(user);
-            }
-        })
+        if (response.ok) {
+            response.json().then(function(json) {
+                document.getElementById("inId").value = "";
+                document.getElementById("inName").value = "";
+                document.getElementById("inLink").value = "";
+                tableUsers.innerHTML = "";
+                for (let user of json) {
+                    tableUsers.innerHTML += createTemplate(user);
+                }
+            })
+        }
+        else {
+            alert(response.status + " " + response.statusText);
+        }
     });
 }
 
@@ -48,6 +53,10 @@ const userPost = function() {
         method: 'POST',
         body: JSON.stringify({id: Id, name: Name, avatar: Avatar, createdAt: date.toISOString()})
     }).then(getUsers);
+
+    if (!response.ok) {
+        alert(response.status + " " + response.statusText);
+    }
 }
 
 const userPut = function() {
@@ -59,20 +68,29 @@ const userPut = function() {
         method: 'PUT',
         body: JSON.stringify({id: Id, name: Name, avatar: Avatar, createdAt: date.toISOString()})
     }).then(getUsers);
+
+    if (!response.ok) {
+        alert(response.status + " " + response.statusText);
+    }
 }
 
 const userGet = id => {
     fetch(requestUrl + "/" + id).then(function(response) {
-        response.json().then(function(json) {
-            tableUsers.innerHTML = "";
-            tableUsers.innerHTML += createTemplate(json);
-            tableUsers.innerHTML += 
-            `<td>
-                <button onclick="getUsers()">To list</button>
-            </td>`;
-            document.getElementById("inId").value = json.id;
-            document.getElementById("inName").value = json.name;
-            document.getElementById("inLink").value = json.avatar;
-        })
+        if (response.ok) {
+            response.json().then(function(json) {
+                tableUsers.innerHTML = "";
+                tableUsers.innerHTML += createTemplate(json);
+                tableUsers.innerHTML += 
+                `<td>
+                    <button onclick="getUsers()">To list</button>
+                </td>`;
+                document.getElementById("inId").value = json.id;
+                document.getElementById("inName").value = json.name;
+                document.getElementById("inLink").value = json.avatar;
+            })
+        }
+        else {
+            alert(response.status + " " + response.statusText);
+        }
     });
 }
