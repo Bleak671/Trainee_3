@@ -103,10 +103,10 @@ const createTemplate = data => {
                 <input id="inName" class="form-control" type="text" placeholder="name">
             </td>
             <td>
-                <button class="btn btn-info" onclick="getUsers()">To list</button>
+                <button class="btn btn-info" onclick="userPut()">Update</button>
             </td>
             <td>
-                <button class="btn btn-info" onclick="userPut()">Update</button>
+                <button class="btn btn-info" onclick="getUsers()">To list</button>
             </td>
             <td>
                 <button class="btn btn-info" onclick="deleteUser(${data.id})">Delete</button>
