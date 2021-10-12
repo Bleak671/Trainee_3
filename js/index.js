@@ -72,7 +72,6 @@ const userGet = id => {
     fetch(requestUrl + "/" + id).then(function(response) {
         if (response.ok) {
             response.json().then(function(json) {
-                json.isSingle = true;
                 tableUsers.innerHTML = "";
                 tableUsers.innerHTML += createTemplate(json);
                 document.getElementById("inId").value = json.id;
@@ -105,6 +104,9 @@ const createTemplate = data => {
             <td>
                 <button class="btn btn-info" onclick="userGet(${data.id})">Get by id</button>
             </td>
+            <td>
+                <button class="btn btn-info" onclick="getUsers()">To list</button>
+            </td>
         </tr>
         `
     } else {
@@ -125,10 +127,6 @@ const createTemplate = data => {
             </tr>
             `
         }
-    }
-    
-    if (data.isSingle) {
-        template += `<button class="btn btn-info" onclick="getUsers()">To list</button>`;
     }
 
     template += "</tbody>"
