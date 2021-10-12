@@ -5,9 +5,6 @@ let users = [];
 const getUsers = function() { fetch(requestUrl).then(function(response) {
         if (response.ok) {
             response.json().then(function(json) {
-                document.getElementById("inId").value = "";
-                document.getElementById("inName").value = "";
-                document.getElementById("inLink").value = "";
                 tableUsers.innerHTML = "";
                 tableUsers.innerHTML += createTemplate(json);
             })
@@ -29,13 +26,8 @@ const deleteUser = id => {
 };
 
 const userPost = function() {
-    let date = new Date();
-    let Id = document.getElementById("inId").value;
-    let Name = document.getElementById("inName").value;
-    let Avatar = document.getElementById("inLink").value;
     const response = fetch(requestUrl, {
-        method: 'POST',
-        body: JSON.stringify({id: Id, name: Name, avatar: Avatar, createdAt: date.toISOString()})
+        method: 'POST'
     }).then(function(response) { 
         if (response.ok) {
             getUsers();
@@ -53,19 +45,23 @@ const userPut = function() {
     let Id = document.getElementById("inId").value;
     let Name = document.getElementById("inName").value;
     let Avatar = document.getElementById("inLink").value;
-    const response = fetch(requestUrl + "/" + Id, {
-        method: 'PUT',
-        body: JSON.stringify({id: Id, name: Name, avatar: Avatar, createdAt: date.toISOString()})
-    }).then(function(response) { 
-        if (response.ok) {
-            getUsers();
-        }
-        else {
-            alert(response.status + " " + response.statusText);
-        }
-    }).catch(function() {
-        alert("fetch error!");
-    });
+    if (Id !== '') {
+        const response = fetch(requestUrl + "/" + Id, {
+            method: 'PUT',
+            body: JSON.stringify({id: Id, name: Name, avatar: Avatar, createdAt: date.toISOString()})
+        }).then(function(response) { 
+            if (response.ok) {
+                getUsers();
+            }
+            else {
+                alert(response.status + " " + response.statusText);
+            }
+        }).catch(function() {
+            alert("fetch error!");
+        });
+    } else {
+        alert("not enough data for request!");
+    }
 }
 
 const userGet = id => {
@@ -88,26 +84,35 @@ const userGet = id => {
 };
 
 const createTemplate = data => {
-    let template = "<tbody>";
-    let i = 0;
+    let template = `
+    <tbody>`;
     if (data.length === undefined) {
         template += `
         <tr id="row${data.id}">
-            <td id="id" class="text-center">${data.id}</td>
-            <td id="pic">
+            <td id="id" class="text-center">
+                <input id="inId" class="form-control" type="hidden" placeholder="id">
+                ${data.id}
+            </td>
+            <td>
                 <img class="rounded" src="${data.avatar}">
             </td>
-            <td id="name" class="text-center">${data.name}</td>
-            <td>
-                <button class="btn btn-info" onclick="deleteUser(${data.id})">Delete</button>
+            <td id="pic">
+                <input id="inLink" class="form-control" type="text" placeholder="link">
             </td>
-            <td>
-                <button class="btn btn-info" onclick="userGet(${data.id})">Get by id</button>
+            <td id="name" class="text-center">
+                <input id="inName" class="form-control" type="text" placeholder="name">
             </td>
             <td>
                 <button class="btn btn-info" onclick="getUsers()">To list</button>
             </td>
+            <td>
+                <button class="btn btn-info" onclick="userPut()">Update</button>
+            </td>
+            <td>
+                <button class="btn btn-info" onclick="deleteUser(${data.id})">Delete</button>
+            </td>
         </tr>
+    </div>
         `
     } else {
         for (let user of data) {
@@ -119,10 +124,10 @@ const createTemplate = data => {
                 </td>
                 <td id="name" class="text-center">${user.name}</td>
                 <td>
-                    <button class="btn btn-info" onclick="deleteUser(${user.id})">Delete</button>
+                    <button class="btn btn-info" onclick="userGet(${user.id})">Get by id</button>
                 </td>
                 <td>
-                    <button class="btn btn-info" onclick="userGet(${user.id})">Get by id</button>
+                    <button class="btn btn-info" onclick="deleteUser(${user.id})">Delete</button>
                 </td>
             </tr>
             `
