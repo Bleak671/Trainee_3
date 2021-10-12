@@ -94,11 +94,11 @@ const createTemplate = data => {
     if (data.length === undefined) {
         template += `
         <tr id="row${data.id}">
-            <td id="id">${data.id}</td>
+            <td id="id" class="text-center">${data.id}</td>
             <td id="pic">
                 <img class="rounded" src="${data.avatar}">
             </td>
-            <td id="name">${data.name}</td>
+            <td id="name" class="text-center">${data.name}</td>
             <td>
                 <button class="btn btn-info" onclick="deleteUser(${data.id})">Delete</button>
             </td>
@@ -111,11 +111,11 @@ const createTemplate = data => {
         for (let user of data) {
             template += `
             <tr id="row${user.id}">
-                <td id="id">${user.id}</td>
+                <td id="id" class="text-center">${user.id}</td>
                 <td id="pic">
                     <img class="rounded" src="${user.avatar}">
                 </td>
-                <td id="name">${user.name}</td>
+                <td id="name" class="text-center">${user.name}</td>
                 <td>
                     <button class="btn btn-info" onclick="deleteUser(${user.id})">Delete</button>
                 </td>
